@@ -1,16 +1,16 @@
-version: "3.9"
-
 services:
   db:
-    image: postgres:17
+    image: postgres
+    container_name: postgres-db
     environment:
       POSTGRES_DB: processamento
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -30,6 +30,10 @@ services:
     container_name: django-back
     ports:
       - "8000:8000"
+    command: >
+      sh -c "python back/manage.py makemigrations &&
+              python back/manage.py migrate && 
+              python back/manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
       - rabbitmq
@@ -38,7 +42,6 @@ services:
     env_file:
       - .env
       - ./worker/.env
-    command: celery -A worker worker --loglevel=info
 
   worker:
     build:
@@ -53,6 +56,7 @@ services:
     env_file:
       - .env
       - worker/.env
+    command: celery -A worker worker --loglevel=info
 
 volumes:
   postgres_data:

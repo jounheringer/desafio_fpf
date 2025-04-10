@@ -10,11 +10,15 @@ COPY . /app
 RUN pip install --upgrade pip && \
     pip install -r back/requirements.txt
 
+RUN chmod +x entrypoint.sh
+
+
 # Ajusta o PYTHONPATH para encontrar o projeto Django
 ENV PYTHONPATH="${PYTHONPATH}:/app/back"
 
 # Define a variável de ambiente do Django
 ENV DJANGO_SETTINGS_MODULE=back.settings
 
+ENTRYPOINT ["sh", "./entrypoint.sh"]
 # Comando padrão para o container do backend
 CMD ["python", "back/manage.py", "runserver", "0.0.0.0:8000"]
