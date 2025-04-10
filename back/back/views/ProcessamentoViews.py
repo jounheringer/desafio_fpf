@@ -15,13 +15,17 @@ def list(request):
     """
     processamento = Processamento.objects.all()
     serializer = ProcessamentoOutputSerializer(processamento, many=True)
-    return Response(
-        {
-            "id": serializer.data["id"],
-            "status": serializer.data["status"],
-            "media": serializer.data["average"],
-            "mediana": serializer.data["median"]
-        }, status=200)
+    result = []
+    for value in serializer.data:
+        result.append(
+            {
+                "id": value["id"],
+                "status": value["status"],
+                "media": value["average"],
+                "mediana": value["median"]
+            }
+        )
+    return Response(result, status=200)
 
 
 @api_view(['GET'])
