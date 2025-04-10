@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: processamento
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: reringuy
+      RABBITMQ_DEFAULT_PASS: 123456
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  django-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.back
+    container_name: django-back
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+      - ./worker/.env
+    command: celery -A worker worker --loglevel=info
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: django-worker
+    depends_on:
+      - django-api
+      - rabbitmq
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+      - worker/.env
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
