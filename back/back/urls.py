@@ -20,7 +20,7 @@ from back.views.ProcessamentoViews import *
 
 urlpatterns = [
     #    path('admin/', admin.site.urls),
-    path('list', list, name='processamento-list'),
-    path('create', create, name='create-processamento'),
-    path('list/<int:id>/', getById, name='processaemnto'),
+    path('', list, name='processamento-list'),
+    path('processar', create, name='create-processamento'),
+    path('status/<int:id>/', getById, name='processaemnto'),
 ]
