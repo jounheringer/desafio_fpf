@@ -1,10 +1,7 @@
 from statistics import median
 from back.models.Processamento import Processamento
 from celery import shared_task
-
 from back.models.ProcessamentoStatus import ProcessamentoStatus
-from back.serializers.ProcessamentoInputSerializer import ProcessamentoInputSerializer
-
 
 @shared_task
 def send_numbers(processo_id):

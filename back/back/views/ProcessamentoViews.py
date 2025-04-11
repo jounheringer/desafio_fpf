@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from back.models.Processamento import Processamento
 from back.serializers.ProcessamentoInputSerializer import ProcessamentoInputSerializer
 from back.serializers.ProcessamentoOutputSerializer import ProcessamentoOutputSerializer
-from back.task import send_numbers
-
+from worker.worker.worker.task import send_numbers
 
 @api_view(['GET'])
 def list(request):
@@ -52,8 +51,6 @@ def create(request):
     serializer = ProcessamentoInputSerializer(data=request.data)
     if serializer.is_valid():
         response = serializer.save()  # Cria o objeto no banco de dados
-        send_numbers.delay(response)
+        send_numbers.delay(response.id)
         return Response({"id": response.id, "status": response.status}, status=201)
-    else:
-        print("balbla")
     return Response("Erro ao processar dados", status=400)

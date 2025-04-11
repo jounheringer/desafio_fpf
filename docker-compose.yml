@@ -39,9 +39,6 @@ services:
       - rabbitmq
     volumes:
       - .:/app
-    env_file:
-      - .env
-      - ./worker/.env
 
   worker:
     build:
@@ -53,10 +50,7 @@ services:
       - rabbitmq
     volumes:
       - .:/app
-    env_file:
-      - .env
-      - worker/.env
-    command: celery -A worker worker --loglevel=info
+    command: celery -A worker.worker.worker worker --loglevel=info
 
 volumes:
   postgres_data:
