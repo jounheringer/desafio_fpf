@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d5423a-35e8-474b-b46b-08aae594983c" name="Changes" comment="Fixed dock compose and added command param in docker compose">
-      <change afterPath="$PROJECT_DIR$/worker/worker/worker/celery.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile.worker" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.worker" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/back/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/back/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/worker/task.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/back/views/ProcessamentoViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/views/ProcessamentoViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/__init__.py" beforeDir="false" />
+    <list default="true" id="c1d5423a-35e8-474b-b46b-08aae594983c" name="Changes" comment="Remade the worker as a django + celery project, fixed the worker docker file and compose,">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,34 +47,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Docker.docker-compose.yml.db: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml.django-api: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml.rabbitmq: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml.worker: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/joaovictorheringer/PycharmProjects/processamento_numeros",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Docker.docker-compose.yml.db: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml.django-api: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml.rabbitmq: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml.worker: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/joaovictorheringer/PycharmProjects/processamento_numeros&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -213,7 +205,9 @@
       <workItem from="1744235855223" duration="92000" />
       <workItem from="1744238260668" duration="8291000" />
       <workItem from="1744246834497" duration="1215000" />
-      <workItem from="1744324108493" duration="9297000" />
+      <workItem from="1744324108493" duration="10603000" />
+      <workItem from="1744386043607" duration="7000" />
+      <workItem from="1744464451273" duration="437000" />
     </task>
     <task id="LOCAL-00001" summary="implemented docker compose and file, created worker folder and updated send_numbers task">
       <option name="closed" value="true" />
@@ -231,7 +225,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744328358317</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Remade the worker as a django + celery project, fixed the worker docker file and compose,">
+      <option name="closed" value="true" />
+      <created>1744334399020</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1744334399020</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,6 +245,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="implemented docker compose and file, created worker folder and updated send_numbers task" />
     <MESSAGE value="Fixed dock compose and added command param in docker compose" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed dock compose and added command param in docker compose" />
+    <MESSAGE value="Remade the worker as a django + celery project, fixed the worker docker file and compose," />
+    <option name="LAST_COMMIT_MESSAGE" value="Remade the worker as a django + celery project, fixed the worker docker file and compose," />
   </component>
 </project>
