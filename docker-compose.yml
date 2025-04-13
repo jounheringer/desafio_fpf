@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
 
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
@@ -42,16 +43,16 @@ services:
 
   worker:
     build:
-      context: .
       dockerfile: Dockerfile.worker
-    container_name: django-worker
+    command: celery -A back.celeryproject.celery_app worker
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+      - DJANGO_SETTINGS_MODULE=back.celeryproject.settings
     depends_on:
       - django-api
       - rabbitmq
-    volumes:
-      - .:/app
-    command: celery -A worker.worker.worker worker --loglevel=info
-
 volumes:
   postgres_data:
   rabbitmq_data:

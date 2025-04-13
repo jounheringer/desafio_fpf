@@ -5,8 +5,8 @@ class ProcessamentoModel {
   num1: number;
   num2: number;
   num3: number;
-  media: number;
-  mediana: number;
+  average: number;
+  median: number;
   status: Status;
 
   constructor(id: number, num1: number, num2: number, num3: number, media: number, mediana: number, status: Status) {
@@ -14,8 +14,8 @@ class ProcessamentoModel {
     this.num1 = num1
     this.num2 = num2
     this.num3 = num3
-    this.media = media
-    this.mediana = mediana
+    this.average = media
+    this.median = mediana
     this.status = status
   }
 }

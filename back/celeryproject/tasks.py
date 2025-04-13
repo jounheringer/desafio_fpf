@@ -1,9 +1,14 @@
 from statistics import median
-from back.models.Processamento import Processamento
 from celery import shared_task
+from back.models.Processamento import Processamento
 from back.models.ProcessamentoStatus import ProcessamentoStatus
 
-@shared_task
+
+@shared_task(
+    bind=True,
+    max_retries=5,
+    default_retry_delay=30
+)
 def send_numbers(processo_id):
     processamento = Processamento.objects.get(id=processo_id)
     nums = [processamento.num1, processamento.num2, processamento.num3]

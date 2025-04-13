@@ -5,7 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1d5423a-35e8-474b-b46b-08aae594983c" name="Changes" comment="Remade the worker as a django + celery project, fixed the worker docker file and compose,">
+      <change afterPath="$PROJECT_DIR$/back/celeryproject/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/django_celery/.idea/worker.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/django_celery/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/front/src/app/service/api.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/front/src/app/service/api.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/front/src/model/ProcessamentoResponse.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile.back" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.back" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile.worker" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.worker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/back/serializers/ProcessamentoOutputSerializer.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/serializers/ProcessamentoOutputSerializer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/back/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/back/views/ProcessamentoViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/views/ProcessamentoViews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/entrypoint.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/back/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/model/ProcessamentoModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/model/ProcessamentoModel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/.idea/worker.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/manage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/worker/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/worker/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/celeryproject/asgi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/worker/celery.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/celeryproject/celery_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/worker/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/celeryproject/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/worker/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/celeryproject/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/worker/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/celeryproject/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/worker/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/celeryproject/wsgi.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +53,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Dockerfile" />
-        <option value="Python Script" />
         <option value="SQL File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -80,10 +114,11 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/back" />
       <recent name="$PROJECT_DIR$/worker/worker" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.docker-compose.yml.db: Compose Deployment">
+  <component name="RunManager" selected="Docker.docker-compose.yml.worker: Compose Deployment">
     <configuration name="processamento_numeros" type="Python.DjangoServer" factoryName="Django server">
       <module name="processamento_numeros" />
       <option name="ENV_FILES" value="" />
@@ -178,9 +213,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.docker-compose.yml.db: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.worker: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.django-api: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.db: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.rabbitmq: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
       </list>

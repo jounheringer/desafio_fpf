@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from back.models.Processamento import Processamento
 from back.serializers.ProcessamentoInputSerializer import ProcessamentoInputSerializer
 from back.serializers.ProcessamentoOutputSerializer import ProcessamentoOutputSerializer
-from worker.worker.worker.task import send_numbers
-
+from celeryproject.tasks import send_numbers
 @api_view(['GET'])
 def list(request):
     """
@@ -14,17 +13,7 @@ def list(request):
     """
     processamento = Processamento.objects.all()
     serializer = ProcessamentoOutputSerializer(processamento, many=True)
-    result = []
-    for value in serializer.data:
-        result.append(
-            {
-                "id": value["id"],
-                "status": value["status"],
-                "media": value["average"],
-                "mediana": value["median"]
-            }
-        )
-    return Response(result, status=200)
+    return Response(serializer.data, status=200)
 
 
 @api_view(['GET'])
