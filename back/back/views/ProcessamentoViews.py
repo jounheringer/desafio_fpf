@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from back.models.Processamento import Processamento
 from back.serializers.ProcessamentoInputSerializer import ProcessamentoInputSerializer
 from back.serializers.ProcessamentoOutputSerializer import ProcessamentoOutputSerializer
-from celeryproject.tasks import send_numbers
+from back.tasks import send_numbers
 @api_view(['GET'])
 def list(request):
     """

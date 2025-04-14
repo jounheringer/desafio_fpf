@@ -44,15 +44,25 @@ services:
   worker:
     build:
       dockerfile: Dockerfile.worker
-    command: celery -A back.celeryproject.celery_app worker
+    command: celery -A back.back.celery_app worker
     volumes:
       - .:/app
     environment:
       - PYTHONPATH=/app
-      - DJANGO_SETTINGS_MODULE=back.celeryproject.settings
+      - DJANGO_SETTINGS_MODULE=back.settings
     depends_on:
       - django-api
       - rabbitmq
+
+  angular:
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    ports:
+      - "4200:80"
+    depends_on:
+      - django-api
+
 volumes:
   postgres_data:
   rabbitmq_data:

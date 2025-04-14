@@ -4,14 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d5423a-35e8-474b-b46b-08aae594983c" name="Changes" comment="Remade the worker as a django + celery project, fixed the worker docker file and compose,">
+    <list default="true" id="c1d5423a-35e8-474b-b46b-08aae594983c" name="Changes" comment="fixed send_number task and migrates">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Changes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile.front" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile.worker" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.worker" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/back/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/back/migrations/0002_alter_processamento_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/back/migrations/0003_alter_processamento_average_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/back/migrations/0004_alter_processamento_status.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/back/migrations/0005_create_processamento_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/celeryproject/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/celeryproject/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/back/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/front/mime.types" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/back/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/back/views/ProcessamentoViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/views/ProcessamentoViews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/celeryproject/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/nginx/default.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/celeryproject/asgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/celeryproject/celery_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/celery_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/celeryproject/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/celeryproject/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/celeryproject/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/celeryproject/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_celery/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_celery/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_celery/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_celery/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_celery/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_celery/.idea/worker.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_celery/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/angular.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,9 +41,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Dockerfile" />
         <option value="SQL File" />
         <option value="Python Script" />
+        <option value="Dockerfile" />
       </list>
     </option>
   </component>
@@ -53,34 +70,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.docker-compose.yml.db: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.django-api: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.rabbitmq: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.worker: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/joaovictorheringer/PycharmProjects/processamento_numeros&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.front.executor": "Run",
+    "Docker.docker-compose.yml.angular: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.db: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.django-api: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.rabbitmq: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml.worker: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/joaovictorheringer/PycharmProjects/processamento_numeros",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -90,7 +109,7 @@
       <recent name="$PROJECT_DIR$/worker/worker" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.docker-compose.yml.django-api: Compose Deployment">
+  <component name="RunManager" selected="Docker.Dockerfile.front">
     <configuration name="processamento_numeros" type="Python.DjangoServer" factoryName="Django server">
       <module name="processamento_numeros" />
       <option name="ENV_FILES" value="" />
@@ -115,16 +134,32 @@
       <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Dockerfile.front" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="sourceFilePath" value="Dockerfile.front" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile" />
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.angular: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
-          <option name="envFilePath" value="" />
+          <option name="services">
+            <list>
+              <option value="angular" />
+            </list>
+          </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
         </settings>
       </deployment>
@@ -157,19 +192,6 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.rabbitmq: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="rabbitmq" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <configuration name="docker-compose.yml.worker: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
@@ -185,11 +207,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.docker-compose.yml.django-api: Compose Deployment" />
+        <item itemvalue="Docker.Dockerfile.front" />
+        <item itemvalue="Docker.docker-compose.yml.angular: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.worker: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.django-api: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.db: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.rabbitmq: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -240,7 +262,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744334399020</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="fixed send_number task and migrates">
+      <option name="closed" value="true" />
+      <created>1744596194764</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1744596194764</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,6 +283,7 @@
     <MESSAGE value="implemented docker compose and file, created worker folder and updated send_numbers task" />
     <MESSAGE value="Fixed dock compose and added command param in docker compose" />
     <MESSAGE value="Remade the worker as a django + celery project, fixed the worker docker file and compose," />
-    <option name="LAST_COMMIT_MESSAGE" value="Remade the worker as a django + celery project, fixed the worker docker file and compose," />
+    <MESSAGE value="fixed send_number task and migrates" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed send_number task and migrates" />
   </component>
 </project>

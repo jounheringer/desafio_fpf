@@ -27,7 +27,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CELERY_BROKER_URL = 'amqp://reringuy:123456@rabbitmq:5672//'
-
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'rpc://'
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,7 +41,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'back',
-    'celeryproject',
 ]
 
 MIDDLEWARE = [

@@ -12,4 +12,6 @@ RUN pip install --upgrade pip && \
 
 
 # Ajusta o PYTHONPATH para encontrar o projeto Django
-ENV PYTHONPATH="${PYTHONPATH}:/app/back/celeryproject"
+ENV PYTHONPATH="${PYTHONPATH}:/app/back"
+# Define a variável de ambiente do Django
+ENV DJANGO_SETTINGS_MODULE=back.settings
