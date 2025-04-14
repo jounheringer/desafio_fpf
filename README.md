@@ -12,3 +12,4 @@ Este projeto é composto por:
 Primeiro precisa do [Docker](https://www.docker.com/get-started) instalado em sua maquina
 Ao baixar o projeto rode o comando "docker compose up --build" para inicializar o container em seu docker
 
+O projeto front end (Angular) estara disponviel no [localhost](http://localhost:4200)
