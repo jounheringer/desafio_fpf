@@ -5,7 +5,6 @@ from back.models.ProcessamentoStatus import ProcessamentoStatus
 
 
 @shared_task(
-    bind=True,
     max_retries=5,
     default_retry_delay=30
 )
