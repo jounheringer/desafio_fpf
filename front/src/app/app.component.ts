@@ -79,6 +79,9 @@ export class AppComponent implements OnInit {
     this.num1 = null;
     this.num2 = null;
     this.num3 = null;
+    this.num1Touched = false;
+    this.num2Touched = false;
+    this.num3Touched = false;
   }
 
   private getAll() {
