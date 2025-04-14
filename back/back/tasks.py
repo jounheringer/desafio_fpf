@@ -1,10 +1,11 @@
 from statistics import median
-from celery import shared_task
+
+from back.celery_app import app
 from back.models.Processamento import Processamento
 from back.models.ProcessamentoStatus import ProcessamentoStatus
 
 
-@shared_task(
+@app.task(
     max_retries=5,
     default_retry_delay=30
 )

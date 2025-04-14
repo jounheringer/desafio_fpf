@@ -56,6 +56,8 @@ export class AppComponent implements OnInit {
     this.api.sendNumbers(new ProcessamentoDto(this.num1, this.num2, this.num3)).subscribe({
       next: (data) => {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Processamento realizado com sucesso'});
+        this.getAll()
+        this.clearInputs()
       },
       error: (error) => {
         this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro ao processar requisicao '});
@@ -70,6 +72,16 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAll()
+  }
+
+  private clearInputs() {
+    this.num1 = null;
+    this.num2 = null;
+    this.num3 = null;
+  }
+
+  private getAll() {
     this.api.getNumbers().subscribe(data => {
       console.log(data);
       this.resultados = data;

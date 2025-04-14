@@ -28,7 +28,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.back
-    container_name: django-back
+    container_name: django-api
     ports:
       - "8000:8000"
     command: >
@@ -44,12 +44,7 @@ services:
   worker:
     build:
       dockerfile: Dockerfile.worker
-    command: celery -A back.back.celery_app worker
-    volumes:
-      - .:/app
-    environment:
-      - PYTHONPATH=/app
-      - DJANGO_SETTINGS_MODULE=back.settings
+    command: celery -A back.celery_app worker
     depends_on:
       - django-api
       - rabbitmq
