@@ -1,0 +1,919 @@
+Index: worker/worker/worker/celery.py
+===================================================================
+diff --git a/worker/worker/worker/celery.py b/worker/worker/worker/celery.py
+deleted file mode 100644
+--- a/worker/worker/worker/celery.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ /dev/null	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
+@@ -1,8 +0,0 @@
+-import os
+-from celery import Celery
+-
+-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'worker.settings')
+-
+-app = Celery('worker')
+-app.config_from_object('django.conf:settings', namespace='CELERY')
+-app.autodiscover_tasks()
+\ No newline at end of file
+Index: back/entrypoint.sh
+===================================================================
+diff --git a/back/entrypoint.sh b/back/entrypoint.sh
+deleted file mode 100644
+--- a/back/entrypoint.sh	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ /dev/null	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
+@@ -1,13 +0,0 @@
+-#!/bin/sh
+-
+-echo "Aguardando o banco de dados ficar disponível..."
+-while ! nc -z db 5432; do
+-  sleep 1
+-done
+-
+-echo "Banco disponível. Rodando migrações..."
+-python back/manage.py makemigrations --noinput
+-python back/manage.py migrate --noinput
+-
+-echo "Iniciando o servidor Django..."
+-exec "$@"
+\ No newline at end of file
+Index: worker/.idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/worker/.idea/misc.xml b/django_celery/.idea/misc.xml
+rename from worker/.idea/misc.xml
+rename to django_celery/.idea/misc.xml
+--- a/worker/.idea/misc.xml	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/django_celery/.idea/misc.xml	(date 1744562742508)
+@@ -3,5 +3,5 @@
+   <component name="Black">
+     <option name="sdkName" value="Python 3.9 (FastAPIProject)" />
+   </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (worker)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (DjangoProject)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: front/src/model/ProcessamentoModel.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import Status from './ProcessamentoStatus';\n\nclass ProcessamentoModel {\n  id: number;\n  num1: number;\n  num2: number;\n  num3: number;\n  media: number;\n  mediana: number;\n  status: Status;\n\n  constructor(id: number, num1: number, num2: number, num3: number, media: number, mediana: number, status: Status) {\n    this.id = id\n    this.num1 = num1\n    this.num2 = num2\n    this.num3 = num3\n    this.media = media\n    this.mediana = mediana\n    this.status = status\n  }\n}\n\nexport default ProcessamentoModel;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/front/src/model/ProcessamentoModel.ts b/front/src/model/ProcessamentoModel.ts
+--- a/front/src/model/ProcessamentoModel.ts	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/front/src/model/ProcessamentoModel.ts	(date 1744507316364)
+@@ -5,8 +5,8 @@
+   num1: number;
+   num2: number;
+   num3: number;
+-  media: number;
+-  mediana: number;
++  average: number;
++  median: number;
+   status: Status;
+ 
+   constructor(id: number, num1: number, num2: number, num3: number, media: number, mediana: number, status: Status) {
+@@ -14,8 +14,8 @@
+     this.num1 = num1
+     this.num2 = num2
+     this.num3 = num3
+-    this.media = media
+-    this.mediana = mediana
++    this.average = media
++    this.median = mediana
+     this.status = status
+   }
+ }
+Index: front/src/model/ProcessamentoResponse.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/front/src/model/ProcessamentoResponse.ts b/front/src/model/ProcessamentoResponse.ts
+new file mode 100644
+--- /dev/null	(date 1744560101058)
++++ b/front/src/model/ProcessamentoResponse.ts	(date 1744560101058)
+@@ -0,0 +1,13 @@
++import ProcessamentoStatus from './ProcessamentoStatus';
++
++class ProcessamentoResponse {
++  id: number;
++  status: ProcessamentoStatus
++
++  constructor(id: number, status: ProcessamentoStatus) {
++    this.id = id
++    this.status = status
++  }
++}
++
++export default ProcessamentoResponse;
+Index: django_celery/worker/core/celeryconfig.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/django_celery/worker/core/celeryconfig.py b/django_celery/worker/core/celeryconfig.py
+new file mode 100644
+--- /dev/null	(date 1744567071869)
++++ b/django_celery/worker/core/celeryconfig.py	(date 1744567071869)
+@@ -0,0 +1,1 @@
++broke
+\ No newline at end of file
+Index: Dockerfile.back
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>FROM python:3.13\n\n# Define o diretório de trabalho\nWORKDIR /app\n\n# Copia os arquivos do projeto\nCOPY . /app\n\n# Instala as dependências\nRUN pip install --upgrade pip && \\\n    pip install -r back/requirements.txt\n\nRUN chmod +x entrypoint.sh\n\n\n# Ajusta o PYTHONPATH para encontrar o projeto Django\nENV PYTHONPATH=\"${PYTHONPATH}:/app/back\"\n\n# Define a variável de ambiente do Django\nENV DJANGO_SETTINGS_MODULE=back.settings\n\nENTRYPOINT [\"sh\", \"./entrypoint.sh\"]\n# Comando padrão para o container do backend\nCMD [\"python\", \"back/manage.py\", \"runserver\", \"0.0.0.0:8000\"]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Dockerfile.back b/Dockerfile.back
+--- a/Dockerfile.back	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/Dockerfile.back	(date 1744557418400)
+@@ -10,15 +10,11 @@
+ RUN pip install --upgrade pip && \
+     pip install -r back/requirements.txt
+ 
+-RUN chmod +x entrypoint.sh
+-
+-
+ # Ajusta o PYTHONPATH para encontrar o projeto Django
+ ENV PYTHONPATH="${PYTHONPATH}:/app/back"
+ 
+ # Define a variável de ambiente do Django
+ ENV DJANGO_SETTINGS_MODULE=back.settings
+ 
+-ENTRYPOINT ["sh", "./entrypoint.sh"]
+ # Comando padrão para o container do backend
+ CMD ["python", "back/manage.py", "runserver", "0.0.0.0:8000"]
+\ No newline at end of file
+Index: Dockerfile.worker
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>FROM python:3.13\n\n# Define diretório de trabalho\nWORKDIR /app\n\n# Copia todos os arquivos (incluindo o back e o worker)\nCOPY . .\n\n# Instala as dependências (ajuste se tiver requirements separados)\nRUN pip install --upgrade pip \\\n    && pip install -r worker/requirements.txt\n\n# Comando padrão: iniciar Celery com o app Django do worker\nCMD [\"celery\", \"-A\", \"worker.worker.worker\", \"worker\", \"--loglevel=info\"]\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Dockerfile.worker b/Dockerfile.worker
+--- a/Dockerfile.worker	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/Dockerfile.worker	(date 1744568388458)
+@@ -3,12 +3,15 @@
+ # Define diretório de trabalho
+ WORKDIR /app
+ 
+-# Copia todos os arquivos (incluindo o back e o worker)
+-COPY . .
++# Copia todos os arquivos (back e django_celery)
++COPY . /app
+ 
+-# Instala as dependências (ajuste se tiver requirements separados)
++# Instala as dependências
+ RUN pip install --upgrade pip \
+-    && pip install -r worker/requirements.txt
++    && pip install -r django_celery/requirements.txt
+ 
+-# Comando padrão: iniciar Celery com o app Django do worker
+-CMD ["celery", "-A", "worker.worker.worker", "worker", "--loglevel=info"]
++# Define a variável de ambiente do Django
++ENV DJANGO_SETTINGS_MODULE=core.settings
++
++# Comando padrão: iniciar Celery com o app Django do django_celery
++#CMD ["celery", "-A", "celery", "worker", "--loglevel=info"]
+Index: docker-compose.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>services:\n  db:\n    image: postgres\n    container_name: postgres-db\n    environment:\n      POSTGRES_DB: processamento\n      POSTGRES_USER: postgres\n      POSTGRES_PASSWORD: postgres\n    ports:\n      - \"5432:5432\"\n    volumes:\n      - postgres_data:/var/lib/postgresql/data\n    restart: unless-stopped\n\n  rabbitmq:\n    image: rabbitmq:3-management\n    ports:\n      - \"5672:5672\"\n      - \"15672:15672\"\n    environment:\n      RABBITMQ_DEFAULT_USER: reringuy\n      RABBITMQ_DEFAULT_PASS: 123456\n    volumes:\n      - rabbitmq_data:/var/lib/rabbitmq\n\n  django-api:\n    build:\n      context: .\n      dockerfile: Dockerfile.back\n    container_name: django-back\n    ports:\n      - \"8000:8000\"\n    command: >\n      sh -c \"python back/manage.py makemigrations &&\n              python back/manage.py migrate && \n              python back/manage.py runserver 0.0.0.0:8000\"\n    depends_on:\n      - db\n      - rabbitmq\n    volumes:\n      - .:/app\n\n  worker:\n    build:\n      context: .\n      dockerfile: Dockerfile.worker\n    container_name: django-worker\n    depends_on:\n      - django-api\n      - rabbitmq\n    volumes:\n      - .:/app\n    command: celery -A worker.worker.worker worker --loglevel=info\n\nvolumes:\n  postgres_data:\n  rabbitmq_data:\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/docker-compose.yml b/docker-compose.yml
+--- a/docker-compose.yml	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/docker-compose.yml	(date 1744568472758)
+@@ -13,6 +13,7 @@
+     restart: unless-stopped
+ 
+   rabbitmq:
++    container_name: rabbitmq
+     image: rabbitmq:3-management
+     ports:
+       - "5672:5672"
+@@ -44,13 +45,15 @@
+     build:
+       context: .
+       dockerfile: Dockerfile.worker
+-    container_name: django-worker
++    container_name: django_celery
++    environment:
++      - PYTHONPATH=/app/worker
+     depends_on:
+       - django-api
+       - rabbitmq
+     volumes:
+       - .:/app
+-    command: celery -A worker.worker.worker worker --loglevel=info
++    command: celery -A celery worker --loglevel=info
+ 
+ volumes:
+   postgres_data:
+Index: front/src/app/app.component.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><main class=\"min-h-screen py-8 px-4\">\n  <div class=\"max-w-4xl mx-auto rounded-lg shadow-lg p-8 border-2 border-gray-200\">\n    <div class=\"flex justify-center\">\n      <h2 class=\"text-3xl font-semibold text-center mb-6 w-full\">Processamento de Números</h2>\n      <p-button\n        icon=\"{{isDarkMode() ? 'pi pi-moon' : 'pi pi-sun'}}\"\n        [rounded]=\"true\"\n        [text]=\"true\"\n        (click)=\"toggleDarkMode()\"\n        [raised]=\"true\"\n      />\n    </div>\n\n    <div class=\"flex justify-center gap-4 mb-6\">\n      <p-inputNumber\n        [(ngModel)]=\"num1\"\n        (onBlur)=\"num1Touched = true\"\n        class=\"{{num1Touched && num1 === null ? 'ng-invalid ng-dirty': ''}}\"\n        placeholder=\"Número 1\"\n        ariaLabel=\"num1\"/>\n      <p-inputNumber\n        [(ngModel)]=\"num2\"\n        (onBlur)=\"num2Touched = true\"\n        class=\"{{num2Touched && num2 === null ? 'ng-invalid ng-dirty': ''}}\"\n        placeholder=\"Número 2\"\n        ariaLabel=\"num2\"/>\n      <p-inputNumber\n        [(ngModel)]=\"num3\"\n        (onBlur)=\"num3Touched = true\"\n        class=\"{{num3Touched && num3 === null ? 'ng-invalid ng-dirty': ''}}\"\n        placeholder=\"Número 3\"\n        ariaLabel=\"num3\"/>\n    </div>\n\n    <div class=\"flex justify-center mb-6\">\n      <p-button label=\"Calcular\"\n                ariaLabel=\"Calcular\"\n                [raised]=\"true\"\n                (onClick)=\"processar()\"\n                [disabled]=\"num1 === null || num2 === null || num3 === null\"/>\n    </div>\n\n    <p-table [value]=\"resultados\"\n             [rows]=\"5\"\n             [paginator]=\"true\"\n             [tableStyle]=\"{ 'min-width': '50rem' }\">\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th pSortableColumn=\"num1\" style=\"width:20%\">\n            Número 1\n            <p-sortIcon field=\"num1\"/>\n          </th>\n          <th pSortableColumn=\"num2\" style=\"width:20%\">\n            Número 2\n            <p-sortIcon field=\"num2\"/>\n          </th>\n          <th pSortableColumn=\"num3\" style=\"width:20%\">\n            Número 3\n            <p-sortIcon field=\"num3\"/>\n          </th>\n          <th pSortableColumn=\"media\" style=\"width:20%\">\n            Média\n            <p-sortIcon field=\"media\"/>\n          </th>\n          <th pSortableColumn=\"mediana\" style=\"width:20%\">\n            Mediana\n            <p-sortIcon field=\"mediana\"/>\n          </th>\n          <th pSortableColumn=\"status\" style=\"width:20%\">\n            Status\n            <p-sortIcon field=\"status\"/>\n          </th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-item>\n        <tr>\n          <td>{{ item.num1 }}</td>\n          <td>{{ item.num2 }}</td>\n          <td>{{ item.num3 }}</td>\n          <td>{{ item.media }}</td>\n          <td>{{ item.mediana }}</td>\n          <td>{{ item.status }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</main>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/front/src/app/app.component.html b/front/src/app/app.component.html
+--- a/front/src/app/app.component.html	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/front/src/app/app.component.html	(date 1744560525615)
+@@ -11,7 +11,7 @@
+       />
+     </div>
+ 
+-    <div class="flex justify-center gap-4 mb-6">
++    <div class="flex flex-col md:flex-row justify-center gap-4 mb-6">
+       <p-inputNumber
+         [(ngModel)]="num1"
+         (onBlur)="num1Touched = true"
+@@ -40,6 +40,7 @@
+                 [disabled]="num1 === null || num2 === null || num3 === null"/>
+     </div>
+ 
++    <p-toast [style]="{'width':'100%'}" position="top-right"></p-toast>
+     <p-table [value]="resultados"
+              [rows]="5"
+              [paginator]="true"
+@@ -77,8 +78,8 @@
+           <td>{{ item.num1 }}</td>
+           <td>{{ item.num2 }}</td>
+           <td>{{ item.num3 }}</td>
+-          <td>{{ item.media }}</td>
+-          <td>{{ item.mediana }}</td>
++          <td>{{ item.median }}</td>
++          <td>{{ item.average.toFixed(2) }}</td>
+           <td>{{ item.status }}</td>
+         </tr>
+       </ng-template>
+Index: back/back/views/ProcessamentoViews.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from rest_framework.decorators import api_view\nfrom rest_framework.generics import get_object_or_404\nfrom rest_framework.response import Response\n\nfrom back.models.Processamento import Processamento\nfrom back.serializers.ProcessamentoInputSerializer import ProcessamentoInputSerializer\nfrom back.serializers.ProcessamentoOutputSerializer import ProcessamentoOutputSerializer\nfrom worker.worker.worker.task import send_numbers\n\n@api_view(['GET'])\ndef list(request):\n    \"\"\"\n    Listagem de todos os objetos de Processamento.\n    \"\"\"\n    processamento = Processamento.objects.all()\n    serializer = ProcessamentoOutputSerializer(processamento, many=True)\n    result = []\n    for value in serializer.data:\n        result.append(\n            {\n                \"id\": value[\"id\"],\n                \"status\": value[\"status\"],\n                \"media\": value[\"average\"],\n                \"mediana\": value[\"median\"]\n            }\n        )\n    return Response(result, status=200)\n\n\n@api_view(['GET'])\ndef getById(request, id):\n    \"\"\"\n    Listagem de todos os objetos de Processamento.\n    \"\"\"\n    processamento = get_object_or_404(Processamento, pk=id)\n    serializer = ProcessamentoOutputSerializer(processamento, many=False)\n    return Response(\n        {\n            \"id\": serializer.data[\"id\"],\n            \"status\": serializer.data[\"status\"],\n            \"media\": serializer.data[\"average\"],\n            \"mediana\": serializer.data[\"median\"]\n        }, status=200)\n\n\n@api_view(['POST'])\ndef create(request):\n    \"\"\"\n    Criação de um objeto de Processamento.\n    \"\"\"\n    serializer = ProcessamentoInputSerializer(data=request.data)\n    if serializer.is_valid():\n        response = serializer.save()  # Cria o objeto no banco de dados\n        send_numbers.delay(response.id)\n        return Response({\"id\": response.id, \"status\": response.status}, status=201)\n    return Response(\"Erro ao processar dados\", status=400)\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/back/views/ProcessamentoViews.py b/back/back/views/ProcessamentoViews.py
+--- a/back/back/views/ProcessamentoViews.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/back/back/views/ProcessamentoViews.py	(date 1744563105672)
+@@ -5,7 +5,7 @@
+ from back.models.Processamento import Processamento
+ from back.serializers.ProcessamentoInputSerializer import ProcessamentoInputSerializer
+ from back.serializers.ProcessamentoOutputSerializer import ProcessamentoOutputSerializer
+-from worker.worker.worker.task import send_numbers
++from django_celery.worker.core.tasks import send_numbers
+ 
+ @api_view(['GET'])
+ def list(request):
+@@ -14,17 +14,7 @@
+     """
+     processamento = Processamento.objects.all()
+     serializer = ProcessamentoOutputSerializer(processamento, many=True)
+-    result = []
+-    for value in serializer.data:
+-        result.append(
+-            {
+-                "id": value["id"],
+-                "status": value["status"],
+-                "media": value["average"],
+-                "mediana": value["median"]
+-            }
+-        )
+-    return Response(result, status=200)
++    return Response(serializer.data, status=200)
+ 
+ 
+ @api_view(['GET'])
+Index: front/src/app/app.component.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {Component, inject, signal} from '@angular/core';\nimport {ButtonModule} from 'primeng/button';\nimport {FormsModule} from '@angular/forms';\nimport {InputNumberModule} from 'primeng/inputnumber';\nimport {TableModule} from 'primeng/table';\nimport ProcessamentoModel from '../model/ProcessamentoModel';\nimport ProcessamentoDto from '../model/ProcessamentoDto';\nimport Status from '../model/ProcessamentoStatus';\nimport {PrimeNG} from 'primeng/config';\nimport Aura from '@primeng/themes/aura';\n\n\n@Component({\n  standalone: true,\n  selector: 'app-root',\n  imports: [ButtonModule, FormsModule, InputNumberModule, TableModule],\n  templateUrl: './app.component.html',\n  styleUrl: './app.component.css'\n})\nexport class AppComponent {\n  primeNgConfig = inject(PrimeNG);\n  isDarkMode = signal(false);\n\n  constructor() {\n    this.primeNgConfig.theme.set({\n      preset: Aura,\n      options: {\n        darkModeSelector: '.dark',\n      },\n    });\n  }\n\n  title = 'front';\n\n  num1: number | null = null;\n  num2: number | null = null;\n  num3: number | null = null;\n\n  num1Touched = false;\n  num2Touched = false;\n  num3Touched = false;\n\n  resultados: ProcessamentoModel[] = [\n    new ProcessamentoModel(1, 1, 2, 3, 4, 5, Status.PROCESSANDO),\n    new ProcessamentoModel(2, 2, 3, 4, 5, 6, Status.PROCESSANDO),\n    new ProcessamentoModel(3, 3, 4, 5, 6, 7, Status.PROCESSANDO),\n    new ProcessamentoModel(4, 4, 5, 6, 7, 8, Status.PROCESSANDO),\n    new ProcessamentoModel(5, 5, 6, 7, 8, 9, Status.PROCESSANDO),\n    new ProcessamentoModel(6, 6, 6, 7, 8, 9, Status.PROCESSANDO),\n  ];\n  form: ProcessamentoDto = new ProcessamentoDto(this.num1, this.num2, this.num3);\n\n  processar() {\n\n  }\n\n  toggleDarkMode() {\n    const element = document.querySelector('html');\n    element?.classList.toggle('dark');\n    this.isDarkMode.set(!this.isDarkMode());\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/front/src/app/app.component.ts b/front/src/app/app.component.ts
+--- a/front/src/app/app.component.ts	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/front/src/app/app.component.ts	(date 1744561286423)
+@@ -1,27 +1,30 @@
+-import {Component, inject, signal} from '@angular/core';
++import {Component, inject, OnInit, signal} from '@angular/core';
+ import {ButtonModule} from 'primeng/button';
+ import {FormsModule} from '@angular/forms';
+ import {InputNumberModule} from 'primeng/inputnumber';
+ import {TableModule} from 'primeng/table';
+ import ProcessamentoModel from '../model/ProcessamentoModel';
+ import ProcessamentoDto from '../model/ProcessamentoDto';
+-import Status from '../model/ProcessamentoStatus';
+ import {PrimeNG} from 'primeng/config';
+ import Aura from '@primeng/themes/aura';
++import {ApiService} from './service/api.service';
++import { ToastModule } from 'primeng/toast';
++import {MessageService} from 'primeng/api';
+ 
+ 
+ @Component({
+   standalone: true,
+   selector: 'app-root',
+-  imports: [ButtonModule, FormsModule, InputNumberModule, TableModule],
++  imports: [ButtonModule, FormsModule, InputNumberModule, TableModule, ToastModule],
++  providers: [MessageService],
+   templateUrl: './app.component.html',
+   styleUrl: './app.component.css'
+ })
+-export class AppComponent {
++export class AppComponent implements OnInit {
+   primeNgConfig = inject(PrimeNG);
+   isDarkMode = signal(false);
+ 
+-  constructor() {
++  constructor(private api: ApiService, private messageService: MessageService) {
+     this.primeNgConfig.theme.set({
+       preset: Aura,
+       options: {
+@@ -40,18 +43,24 @@
+   num2Touched = false;
+   num3Touched = false;
+ 
+-  resultados: ProcessamentoModel[] = [
+-    new ProcessamentoModel(1, 1, 2, 3, 4, 5, Status.PROCESSANDO),
+-    new ProcessamentoModel(2, 2, 3, 4, 5, 6, Status.PROCESSANDO),
+-    new ProcessamentoModel(3, 3, 4, 5, 6, 7, Status.PROCESSANDO),
+-    new ProcessamentoModel(4, 4, 5, 6, 7, 8, Status.PROCESSANDO),
+-    new ProcessamentoModel(5, 5, 6, 7, 8, 9, Status.PROCESSANDO),
+-    new ProcessamentoModel(6, 6, 6, 7, 8, 9, Status.PROCESSANDO),
+-  ];
+-  form: ProcessamentoDto = new ProcessamentoDto(this.num1, this.num2, this.num3);
++  resultados: ProcessamentoModel[] = [];
++
++  refesh() {
++    this.api.getNumbers().subscribe(data => {
++      this.resultados = data;
++    })
++  }
+ 
+   processar() {
+-
++    this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Enviado requisicao de processamento'});
++    this.api.sendNumbers(new ProcessamentoDto(this.num1, this.num2, this.num3)).subscribe({
++      next: (data) => {
++        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Processamento realizado com sucesso'});
++      },
++      error: (error) => {
++        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro ao processar requisicao '});
++      }
++    })
+   }
+ 
+   toggleDarkMode() {
+@@ -59,4 +68,11 @@
+     element?.classList.toggle('dark');
+     this.isDarkMode.set(!this.isDarkMode());
+   }
++
++  ngOnInit(): void {
++    this.api.getNumbers().subscribe(data => {
++      console.log(data);
++      this.resultados = data;
++    })
++  }
+ }
+Index: back/requirements.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>amqp==5.3.1\nasgiref==3.8.1\nbilliard==4.2.1\ncelery==5.5.1\nclick==8.1.8\nclick-didyoumean==0.3.1\nclick-plugins==1.1.1\nclick-repl==0.3.0\nDjango==4.2.20\ndjangorestframework==3.16.0\nkombu==5.5.2\nprompt_toolkit==3.0.50\npsycopg2-binary==2.9.10\npython-dateutil==2.9.0.post0\nsix==1.17.0\nsqlparse==0.5.3\ntyping_extensions==4.12.2\ntzdata==2025.2\nvine==5.1.0\nwcwidth==0.2.13\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/requirements.txt b/back/requirements.txt
+--- a/back/requirements.txt	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/back/requirements.txt	(date 1744554075399)
+@@ -7,6 +7,7 @@
+ click-plugins==1.1.1
+ click-repl==0.3.0
+ Django==4.2.20
++django-cors-headers==4.7.0
+ djangorestframework==3.16.0
+ kombu==5.5.2
+ prompt_toolkit==3.0.50
+Index: front/src/app/app.config.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';\nimport { provideRouter } from '@angular/router';\nimport { routes } from './app.routes';\nimport {provideAnimationsAsync} from '@angular/platform-browser/animations/async';\nimport {providePrimeNG} from 'primeng/config';\nimport Aura from '@primeng/themes/aura';\n\nexport const appConfig: ApplicationConfig = {\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideRouter(routes),\n    provideAnimationsAsync(),\n    providePrimeNG({\n      theme: { preset: Aura }\n    })\n  ]\n};\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/front/src/app/app.config.ts b/front/src/app/app.config.ts
+--- a/front/src/app/app.config.ts	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/front/src/app/app.config.ts	(date 1744507034402)
+@@ -1,17 +1,19 @@
+-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+-import { provideRouter } from '@angular/router';
+-import { routes } from './app.routes';
++import {ApplicationConfig, provideZoneChangeDetection} from '@angular/core';
++import {provideRouter} from '@angular/router';
++import {routes} from './app.routes';
+ import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
+ import {providePrimeNG} from 'primeng/config';
+ import Aura from '@primeng/themes/aura';
++import {provideHttpClient, withFetch} from '@angular/common/http';
+ 
+ export const appConfig: ApplicationConfig = {
+   providers: [
+-    provideZoneChangeDetection({ eventCoalescing: true }),
++    provideZoneChangeDetection({eventCoalescing: true}),
+     provideRouter(routes),
+     provideAnimationsAsync(),
+     providePrimeNG({
+-      theme: { preset: Aura }
+-    })
++      theme: {preset: Aura}
++    }),
++    provideHttpClient()
+   ]
+ };
+Index: back/back/settings.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"\"\"\nDjango settings for back project.\n\nGenerated by 'django-admin startproject' using Django 4.2.20.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/4.2/topics/settings/\n\nFor the full list of settings and their values, see\nhttps://docs.djangoproject.com/en/4.2/ref/settings/\n\"\"\"\n\nfrom pathlib import Path\n\n# Build paths inside the project like this: BASE_DIR / 'subdir'.\nBASE_DIR = Path(__file__).resolve().parent.parent\n\n\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/\n\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = 'django-insecure-9_&z!x#^aja$iks3_96wds5x6z9#kh(wgjf8)52c8!&w)r$$d)'\n\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\n\nALLOWED_HOSTS = []\n\nCELERY_BROKER_URL = 'amqp://reringuy:123456@rabbitmq:5672//'\nCELERY_ACCEPT_CONTENT = ['json']\nCELERY_TASK_SERIALIZER = 'json'\n\n# Application definition\n\nINSTALLED_APPS = [\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n    'rest_framework',\n    'back'\n]\n\nMIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\n\nROOT_URLCONF = 'back.urls'\n\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'templates']\n        ,\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',\n                'django.contrib.messages.context_processors.messages',\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = 'back.wsgi.application'\n\n\n# Database\n# https://docs.djangoproject.com/en/4.2/ref/settings/#databases\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.postgresql',\n        'NAME': 'processamento',\n        'USER': 'postgres',\n        'PASSWORD': 'postgres',\n        'HOST': 'db',\n        'PORT': '5432',\n    }\n}\n\n\n# Password validation\n# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',\n    },\n]\n\n\n# Internationalization\n# https://docs.djangoproject.com/en/4.2/topics/i18n/\n\nLANGUAGE_CODE = 'en-us'\n\nTIME_ZONE = 'UTC'\n\nUSE_I18N = True\n\nUSE_TZ = True\n\n\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/4.2/howto/static-files/\n\nSTATIC_URL = 'static/'\n\n# Default primary key field type\n# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field\n\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/back/settings.py b/back/back/settings.py
+--- a/back/back/settings.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/back/back/settings.py	(date 1744566678746)
+@@ -15,7 +15,6 @@
+ # Build paths inside the project like this: BASE_DIR / 'subdir'.
+ BASE_DIR = Path(__file__).resolve().parent.parent
+ 
+-
+ # Quick-start development settings - unsuitable for production
+ # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+ 
+@@ -27,10 +26,6 @@
+ 
+ ALLOWED_HOSTS = []
+ 
+-CELERY_BROKER_URL = 'amqp://reringuy:123456@rabbitmq:5672//'
+-CELERY_ACCEPT_CONTENT = ['json']
+-CELERY_TASK_SERIALIZER = 'json'
+-
+ # Application definition
+ 
+ INSTALLED_APPS = [
+@@ -39,8 +34,9 @@
+     'django.contrib.sessions',
+     'django.contrib.messages',
+     'django.contrib.staticfiles',
++    'corsheaders',
+     'rest_framework',
+-    'back'
++    'back',
+ ]
+ 
+ MIDDLEWARE = [
+@@ -51,7 +47,10 @@
+     'django.contrib.auth.middleware.AuthenticationMiddleware',
+     'django.contrib.messages.middleware.MessageMiddleware',
+     'django.middleware.clickjacking.XFrameOptionsMiddleware',
++    'corsheaders.middleware.CorsMiddleware',
+ ]
++
++CORS_ORIGIN_ALLOW_ALL = True
+ 
+ ROOT_URLCONF = 'back.urls'
+ 
+@@ -74,7 +73,6 @@
+ 
+ WSGI_APPLICATION = 'back.wsgi.application'
+ 
+-
+ # Database
+ # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+ 
+@@ -89,7 +87,6 @@
+     }
+ }
+ 
+-
+ # Password validation
+ # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+ 
+@@ -108,7 +105,6 @@
+     },
+ ]
+ 
+-
+ # Internationalization
+ # https://docs.djangoproject.com/en/4.2/topics/i18n/
+ 
+@@ -120,7 +116,6 @@
+ 
+ USE_TZ = True
+ 
+-
+ # Static files (CSS, JavaScript, Images)
+ # https://docs.djangoproject.com/en/4.2/howto/static-files/
+ 
+Index: back/back/serializers/ProcessamentoOutputSerializer.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from rest_framework import serializers\n\nfrom back.models.Processamento import Processamento\n\n\nclass ProcessamentoOutputSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Processamento\n        fields = ['id', 'status', 'average', 'median']
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/back/back/serializers/ProcessamentoOutputSerializer.py b/back/back/serializers/ProcessamentoOutputSerializer.py
+--- a/back/back/serializers/ProcessamentoOutputSerializer.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/back/back/serializers/ProcessamentoOutputSerializer.py	(date 1744507226170)
+@@ -6,4 +6,4 @@
+ class ProcessamentoOutputSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = Processamento
+-        fields = ['id', 'status', 'average', 'median']
+\ No newline at end of file
++        fields = '__all__'
+\ No newline at end of file
+Index: worker/worker/manage.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/worker/worker/manage.py b/django_celery/worker/manage.py
+rename from worker/worker/manage.py
+rename to django_celery/worker/manage.py
+--- a/worker/worker/manage.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/django_celery/worker/manage.py	(date 1744562757182)
+@@ -6,7 +6,7 @@
+ 
+ def main():
+     """Run administrative tasks."""
+-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'worker.settings')
++    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+     try:
+         from django.core.management import execute_from_command_line
+     except ImportError as exc:
+Index: worker/worker/worker/asgi.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/worker/worker/worker/asgi.py b/django_celery/worker/core/asgi.py
+rename from worker/worker/worker/asgi.py
+rename to django_celery/worker/core/asgi.py
+--- a/worker/worker/worker/asgi.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/django_celery/worker/core/asgi.py	(date 1744566730815)
+@@ -1,5 +1,5 @@
+ """
+-ASGI config for worker project.
++ASGI config for django_celery project.
+ 
+ It exposes the ASGI callable as a module-level variable named ``application``.
+ 
+@@ -11,6 +11,6 @@
+ 
+ from django.core.asgi import get_asgi_application
+ 
+-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'worker.settings')
++os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'worker.core.settings')
+ 
+ application = get_asgi_application()
+Index: worker/worker/worker/settings.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/worker/worker/worker/settings.py b/django_celery/worker/core/settings.py
+rename from worker/worker/worker/settings.py
+rename to django_celery/worker/core/settings.py
+--- a/worker/worker/worker/settings.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/django_celery/worker/core/settings.py	(date 1744567585447)
+@@ -1,5 +1,5 @@
+ """
+-Django settings for worker project.
++Django settings for django_celery project.
+ 
+ Generated by 'django-admin startproject' using Django 4.2.20.
+ 
+@@ -27,11 +27,11 @@
+ 
+ ALLOWED_HOSTS = []
+ 
+-
+ # Application definition
+-CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
++CELERY_BROKER_URL = 'amqp://reringuy:123456@rabbitmq:5672//'
+ CELERY_ACCEPT_CONTENT = ['json']
+ CELERY_TASK_SERIALIZER = 'json'
++CELERY_RESULT_BACKEND = 'rpc://'
+ 
+ INSTALLED_APPS = [
+     'django.contrib.admin',
+@@ -40,7 +40,7 @@
+     'django.contrib.sessions',
+     'django.contrib.messages',
+     'django.contrib.staticfiles',
+-    'worker'
++    'core'
+ ]
+ 
+ MIDDLEWARE = [
+@@ -53,7 +53,7 @@
+     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+ ]
+ 
+-ROOT_URLCONF = 'worker.urls'
++ROOT_URLCONF = 'core.urls'
+ 
+ TEMPLATES = [
+     {
+@@ -71,7 +71,7 @@
+     },
+ ]
+ 
+-WSGI_APPLICATION = 'worker.wsgi.application'
++WSGI_APPLICATION = 'core.wsgi.application'
+ 
+ 
+ # Database
+Index: worker/worker/worker/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/worker/worker/worker/urls.py b/django_celery/worker/core/urls.py
+rename from worker/worker/worker/urls.py
+rename to django_celery/worker/core/urls.py
+--- a/worker/worker/worker/urls.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/django_celery/worker/core/urls.py	(date 1744562742466)
+@@ -1,5 +1,5 @@
+ """
+-URL configuration for worker project.
++URL configuration for django_celery project.
+ 
+ The `urlpatterns` list routes URLs to views. For more information please see:
+     https://docs.djangoproject.com/en/4.2/topics/http/urls/
+@@ -14,9 +14,6 @@
+     1. Import the include() function: from django.urls import include, path
+     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+ """
+-from django.contrib import admin
+-from django.urls import path
+ 
+ urlpatterns = [
+-    path('admin/', admin.site.urls),
+ ]
+Index: worker/worker/worker/wsgi.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/worker/worker/worker/wsgi.py b/django_celery/worker/core/wsgi.py
+rename from worker/worker/worker/wsgi.py
+rename to django_celery/worker/core/wsgi.py
+--- a/worker/worker/worker/wsgi.py	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/django_celery/worker/core/wsgi.py	(date 1744562749492)
+@@ -1,5 +1,5 @@
+ """
+-WSGI config for worker project.
++WSGI config for django_celery project.
+ 
+ It exposes the WSGI callable as a module-level variable named ``application``.
+ 
+@@ -11,6 +11,6 @@
+ 
+ from django.core.wsgi import get_wsgi_application
+ 
+-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'worker.settings')
++os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+ 
+ application = get_wsgi_application()
+Index: django_celery/worker/core/celery.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/django_celery/worker/core/celery.py b/django_celery/worker/core/celery.py
+new file mode 100644
+--- /dev/null	(date 1744568009862)
++++ b/django_celery/worker/core/celery.py	(date 1744568009862)
+@@ -0,0 +1,8 @@
++import os
++from celery import Celery
++
++os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
++
++app = Celery('core')
++app.config_from_object('django.conf:settings', namespace='CELERY')
++app.autodiscover_tasks()
+\ No newline at end of file
+Index: front/src/app/service/api.service.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/front/src/app/service/api.service.ts b/front/src/app/service/api.service.ts
+new file mode 100644
+--- /dev/null	(date 1744560159406)
++++ b/front/src/app/service/api.service.ts	(date 1744560159406)
+@@ -0,0 +1,31 @@
++import { Injectable } from '@angular/core';
++import {HttpClient, HttpHeaders} from '@angular/common/http';
++import {Observable} from 'rxjs';
++import ProcessamentoModel from '../../model/ProcessamentoModel';
++import ProcessamentoDto from '../../model/ProcessamentoDto';
++import ProcessamentoResponse from '../../model/ProcessamentoResponse';
++
++@Injectable({
++  providedIn: 'root'
++})
++export class ApiService {
++  private url = 'http://localhost:8000/';
++
++  constructor(private http: HttpClient) { }
++
++  httpOptions = {
++    headers: new HttpHeaders({'Content-Type': 'application/json'})
++  };
++
++  getNumbers(): Observable<ProcessamentoModel[]> {
++    return this.http.get<ProcessamentoModel[]>(this.url);
++  }
++
++  getNumberById(id: number): Observable<ProcessamentoModel> {
++    return this.http.get<ProcessamentoModel>(this.url + 'status/' +id);
++  }
++
++  sendNumbers(dto: ProcessamentoDto): Observable<ProcessamentoResponse> {
++    return this.http.post<ProcessamentoResponse>(this.url + 'processar', dto, this.httpOptions);
++  }
++}
+Index: worker/requirements.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/worker/requirements.txt b/django_celery/requirements.txt
+rename from worker/requirements.txt
+rename to django_celery/requirements.txt
+--- a/worker/requirements.txt	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/django_celery/requirements.txt	(date 1744559133734)
+@@ -9,6 +9,7 @@
+ Django==4.2.20
+ kombu==5.5.2
+ prompt_toolkit==3.0.50
++psycopg2-binary==2.9.10
+ python-dateutil==2.9.0.post0
+ six==1.17.0
+ sqlparse==0.5.3
+Index: front/src/app/service/api.service.spec.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/front/src/app/service/api.service.spec.ts b/front/src/app/service/api.service.spec.ts
+new file mode 100644
+--- /dev/null	(date 1744505067225)
++++ b/front/src/app/service/api.service.spec.ts	(date 1744505067225)
+@@ -0,0 +1,16 @@
++import { TestBed } from '@angular/core/testing';
++
++import { ApiService } from './api.service';
++
++describe('ApiService', () => {
++  let service: ApiService;
++
++  beforeEach(() => {
++    TestBed.configureTestingModule({});
++    service = TestBed.inject(ApiService);
++  });
++
++  it('should be created', () => {
++    expect(service).toBeTruthy();
++  });
++});
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"c1d5423a-35e8-474b-b46b-08aae594983c\" name=\"Changes\" comment=\"Remade the worker as a django + celery project, fixed the worker docker file and compose,\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"DjangoConsoleOptions\" custom-start-script=\"import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)\">\n    <option name=\"myCustomStartScript\" value=\"import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Dockerfile\" />\n        <option value=\"Python Script\" />\n        <option value=\"SQL File\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"GitHubPullRequestSearchHistory\">{\n  &quot;lastFilter&quot;: {\n    &quot;state&quot;: &quot;OPEN&quot;,\n    &quot;assignee&quot;: &quot;jounheringer&quot;\n  }\n}</component>\n  <component name=\"GithubPullRequestsUISettings\">{\n  &quot;selectedUrlAndAccountId&quot;: {\n    &quot;url&quot;: &quot;https://github.com/jounheringer/desafio_fpf.git&quot;,\n    &quot;accountId&quot;: &quot;97ee2ecc-bbca-496e-ac13-ed991f33f41d&quot;\n  }\n}</component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 0\n}</component>\n  <component name=\"ProjectId\" id=\"2vVgrW7FBQJDNo1cwL8Oglss6sg\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\n    &quot;Docker.docker-compose.yml.db: Compose Deployment.executor&quot;: &quot;Run&quot;,\n    &quot;Docker.docker-compose.yml.django-api: Compose Deployment.executor&quot;: &quot;Run&quot;,\n    &quot;Docker.docker-compose.yml.rabbitmq: Compose Deployment.executor&quot;: &quot;Run&quot;,\n    &quot;Docker.docker-compose.yml.worker: Compose Deployment.executor&quot;: &quot;Run&quot;,\n    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,\n    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\n    &quot;last_opened_file_path&quot;: &quot;/Users/joaovictorheringer/PycharmProjects/processamento_numeros&quot;,\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\n  },\n  &quot;keyToStringList&quot;: {\n    &quot;DatabaseDriversLRU&quot;: [\n      &quot;postgresql&quot;\n    ]\n  }\n}</component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$\" />\n    </key>\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/worker/worker\" />\n    </key>\n  </component>\n  <component name=\"RunManager\" selected=\"Docker.docker-compose.yml.db: Compose Deployment\">\n    <configuration name=\"processamento_numeros\" type=\"Python.DjangoServer\" factoryName=\"Django server\">\n      <module name=\"processamento_numeros\" />\n      <option name=\"ENV_FILES\" value=\"\" />\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\n      <option name=\"PARENT_ENVS\" value=\"true\" />\n      <envs>\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\n      </envs>\n      <option name=\"SDK_HOME\" value=\"\" />\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\n      <option name=\"launchJavascriptDebuger\" value=\"false\" />\n      <option name=\"port\" value=\"8000\" />\n      <option name=\"host\" value=\"\" />\n      <option name=\"additionalOptions\" value=\"\" />\n      <option name=\"browserUrl\" value=\"\" />\n      <option name=\"runTestServer\" value=\"false\" />\n      <option name=\"runNoReload\" value=\"false\" />\n      <option name=\"useCustomRunCommand\" value=\"false\" />\n      <option name=\"customRunCommand\" value=\"\" />\n      <method v=\"2\" />\n    </configuration>\n    <configuration default=\"true\" type=\"docker-deploy\" factoryName=\"docker-compose.yml\" temporary=\"true\">\n      <deployment type=\"docker-compose.yml\">\n        <settings />\n      </deployment>\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"docker-compose.yml: Compose Deployment\" type=\"docker-deploy\" factoryName=\"docker-compose.yml\" temporary=\"true\" server-name=\"Docker\">\n      <deployment type=\"docker-compose.yml\">\n        <settings>\n          <option name=\"envFilePath\" value=\"\" />\n          <option name=\"sourceFilePath\" value=\"docker-compose.yml\" />\n        </settings>\n      </deployment>\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"docker-compose.yml.db: Compose Deployment\" type=\"docker-deploy\" factoryName=\"docker-compose.yml\" temporary=\"true\" server-name=\"Docker\">\n      <deployment type=\"docker-compose.yml\">\n        <settings>\n          <option name=\"envFilePath\" value=\"\" />\n          <option name=\"services\">\n            <list>\n              <option value=\"db\" />\n            </list>\n          </option>\n          <option name=\"sourceFilePath\" value=\"docker-compose.yml\" />\n        </settings>\n      </deployment>\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"docker-compose.yml.django-api: Compose Deployment\" type=\"docker-deploy\" factoryName=\"docker-compose.yml\" temporary=\"true\" server-name=\"Docker\">\n      <deployment type=\"docker-compose.yml\">\n        <settings>\n          <option name=\"services\">\n            <list>\n              <option value=\"django-api\" />\n            </list>\n          </option>\n          <option name=\"sourceFilePath\" value=\"docker-compose.yml\" />\n        </settings>\n      </deployment>\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"docker-compose.yml.rabbitmq: Compose Deployment\" type=\"docker-deploy\" factoryName=\"docker-compose.yml\" temporary=\"true\" server-name=\"Docker\">\n      <deployment type=\"docker-compose.yml\">\n        <settings>\n          <option name=\"services\">\n            <list>\n              <option value=\"rabbitmq\" />\n            </list>\n          </option>\n          <option name=\"sourceFilePath\" value=\"docker-compose.yml\" />\n        </settings>\n      </deployment>\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"docker-compose.yml.worker: Compose Deployment\" type=\"docker-deploy\" factoryName=\"docker-compose.yml\" temporary=\"true\" server-name=\"Docker\">\n      <deployment type=\"docker-compose.yml\">\n        <settings>\n          <option name=\"services\">\n            <list>\n              <option value=\"worker\" />\n            </list>\n          </option>\n          <option name=\"sourceFilePath\" value=\"docker-compose.yml\" />\n        </settings>\n      </deployment>\n      <method v=\"2\" />\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Docker.docker-compose.yml.db: Compose Deployment\" />\n        <item itemvalue=\"Docker.docker-compose.yml.worker: Compose Deployment\" />\n        <item itemvalue=\"Docker.docker-compose.yml.django-api: Compose Deployment\" />\n        <item itemvalue=\"Docker.docker-compose.yml.rabbitmq: Compose Deployment\" />\n        <item itemvalue=\"Docker.docker-compose.yml: Compose Deployment\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26053.29\" />\n        <option value=\"bundled-python-sdk-b1dbf8ef85a6-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26053.29\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"c1d5423a-35e8-474b-b46b-08aae594983c\" name=\"Changes\" comment=\"\" />\n      <created>1744235854091</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1744235854091</updated>\n      <workItem from=\"1744235855223\" duration=\"92000\" />\n      <workItem from=\"1744238260668\" duration=\"8291000\" />\n      <workItem from=\"1744246834497\" duration=\"1215000\" />\n      <workItem from=\"1744324108493\" duration=\"10603000\" />\n      <workItem from=\"1744386043607\" duration=\"7000\" />\n      <workItem from=\"1744464451273\" duration=\"437000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"implemented docker compose and file, created worker folder and updated send_numbers task\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1744243707179</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1744243707179</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"Fixed dock compose and added command param in docker compose\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1744328358317</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1744328358317</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"Remade the worker as a django + celery project, fixed the worker docker file and compose,\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1744334399020</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1744334399020</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"4\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"UnknownFeatures\">\n    <option featureType=\"com.intellij.fileTypeFactory\" implementationName=\".env\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"implemented docker compose and file, created worker folder and updated send_numbers task\" />\n    <MESSAGE value=\"Fixed dock compose and added command param in docker compose\" />\n    <MESSAGE value=\"Remade the worker as a django + celery project, fixed the worker docker file and compose,\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Remade the worker as a django + celery project, fixed the worker docker file and compose,\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/.idea/workspace.xml	(date 1744568472894)
+@@ -5,7 +5,40 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="c1d5423a-35e8-474b-b46b-08aae594983c" name="Changes" comment="Remade the worker as a django + celery project, fixed the worker docker file and compose,">
++      <change afterPath="$PROJECT_DIR$/django_celery/worker/core/celery.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/django_celery/worker/core/celeryconfig.py" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/front/src/app/service/api.service.spec.ts" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/front/src/app/service/api.service.ts" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/front/src/model/ProcessamentoResponse.ts" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Dockerfile.back" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.back" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/Dockerfile.worker" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.worker" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/back/serializers/ProcessamentoOutputSerializer.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/serializers/ProcessamentoOutputSerializer.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/back/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/settings.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/back/views/ProcessamentoViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/back/views/ProcessamentoViews.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/entrypoint.sh" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/back/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/back/requirements.txt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/front/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.component.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/front/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.component.ts" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/front/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.config.ts" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/front/src/model/ProcessamentoModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/model/ProcessamentoModel.ts" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/.gitignore" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/modules.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/vcs.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/.idea/worker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/.idea/worker.iml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/requirements.txt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/.env" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/worker/.env" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/worker/manage.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/worker/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/worker/core/__init__.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/worker/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/worker/core/asgi.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/worker/celery.py" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/worker/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/worker/core/settings.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/worker/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/worker/core/tasks.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/worker/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/worker/core/urls.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/worker/worker/worker/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_celery/worker/core/wsgi.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -19,8 +52,8 @@
+     <option name="RECENT_TEMPLATES">
+       <list>
+         <option value="Dockerfile" />
+-        <option value="Python Script" />
+         <option value="SQL File" />
++        <option value="Python Script" />
+       </list>
+     </option>
+   </component>
+@@ -80,6 +113,7 @@
+       <recent name="$PROJECT_DIR$" />
+     </key>
+     <key name="MoveFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$" />
+       <recent name="$PROJECT_DIR$/worker/worker" />
+     </key>
+   </component>
+@@ -208,6 +242,9 @@
+       <workItem from="1744324108493" duration="10603000" />
+       <workItem from="1744386043607" duration="7000" />
+       <workItem from="1744464451273" duration="437000" />
++      <workItem from="1744507717102" duration="9232000" />
++      <workItem from="1744562630409" duration="28000" />
++      <workItem from="1744562776204" duration="5678000" />
+     </task>
+     <task id="LOCAL-00001" summary="implemented docker compose and file, created worker folder and updated send_numbers task">
+       <option name="closed" value="true" />
+Index: worker/.idea/worker.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/worker/.idea/worker.iml b/django_celery/.idea/worker.iml
+rename from worker/.idea/worker.iml
+rename to django_celery/.idea/worker.iml
+--- a/worker/.idea/worker.iml	(revision 71f5035d0a4e70ba48f6402888dfa3bd53e220f7)
++++ b/django_celery/.idea/worker.iml	(date 1744562742506)
+@@ -4,7 +4,7 @@
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.9 (worker)" jdkType="Python SDK" />
++    <orderEntry type="jdk" jdkName="Python 3.9 (DjangoProject)" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
+diff --git a/worker/.idea/vcs.xml b/django_celery/.idea/vcs.xml
+rename from worker/.idea/vcs.xml
+rename to django_celery/.idea/vcs.xml
+diff --git a/worker/worker/worker/task.py b/django_celery/worker/core/tasks.py
+rename from worker/worker/worker/task.py
+rename to django_celery/worker/core/tasks.py
+diff --git a/worker/worker/worker/__init__.py b/django_celery/worker/core/__init__.py
+rename from worker/worker/worker/__init__.py
+rename to django_celery/worker/core/__init__.py
+diff --git a/worker/.idea/.gitignore b/django_celery/.idea/.gitignore
+rename from worker/.idea/.gitignore
+rename to django_celery/.idea/.gitignore
+diff --git a/worker/.idea/inspectionProfiles/profiles_settings.xml b/django_celery/.idea/inspectionProfiles/profiles_settings.xml
+rename from worker/.idea/inspectionProfiles/profiles_settings.xml
+rename to django_celery/.idea/inspectionProfiles/profiles_settings.xml
+diff --git a/worker/worker/.env b/django_celery/worker/.env
+rename from worker/worker/.env
+rename to django_celery/worker/.env
+diff --git a/worker/.idea/modules.xml b/django_celery/.idea/modules.xml
+rename from worker/.idea/modules.xml
+rename to django_celery/.idea/modules.xml
